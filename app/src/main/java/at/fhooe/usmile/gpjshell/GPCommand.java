@@ -7,78 +7,67 @@
  * 
  * Contributors:
  *     Michael Hölzl <mihoelzl@gmail.com> - initial implementation
- *     Thomas Sigmund - data base, key set, channel set selection and GET DATA integration
  ******************************************************************************/
 package at.fhooe.usmile.gpjshell;
 
-import at.fhooe.usmile.gpjshell.MainActivity.APDU_COMMAND;
-
 public class GPCommand {
-
-	private byte[] mParams;
-	private byte mPrivileges;
-	private int mSeekReader;
-	private String mReaderName;
-
-	
-	private APDU_COMMAND mCmd;
-	private Object mCommandParameter;
-	
-
-	public GPCommand(APDU_COMMAND _cmd, int _seekReader, byte[] _params,
-			byte _privileges, Object _cmdParam) {
-		setCmd(_cmd);
-		setSeekReader(_seekReader);
-		setPrivileges(_privileges);
-		setParams(_params);
-		setCommandParameter(_cmdParam);
-	}
-
-	public APDU_COMMAND getCmd() {
-		return mCmd;
-	}
-
-	public void setCmd(APDU_COMMAND mCmd) {
-		this.mCmd = mCmd;
-	}
-
-	public byte getPrivileges() {
-		return mPrivileges;
-	}
-
-	public void setPrivileges(byte mPrivileges) {
-		this.mPrivileges = mPrivileges;
-	}
-
-	public byte[] getInstallParams() {
-		return mParams;
-	}
-
-	public void setParams(byte[] mParams) {
-		this.mParams = mParams;
-	}
-
-	public int getSeekReader() {
-		return mSeekReader;
-	}
-
-	public void setSeekReader(int mSeekReader) {
-		this.mSeekReader = mSeekReader;
-	}
-
-	public String getSeekReaderName() {
-		return mReaderName;
-	}
-
-	public void setReaderName(String mReaderName) {
-		this.mReaderName = mReaderName;
-	}
-
-	public Object getCommandParameter() {
-		return mCommandParameter;
-	}
-
-	public void setCommandParameter(Object mCommandParameter) {
-		this.mCommandParameter = mCommandParameter;
-	}
+        
+        public enum GP_APDU_COMMAND {
+                APDU_DISPLAYAPPLETS_ONCARD, APDU_INSTALL, APDU_DELETE_SELECTED_APPLET, APDU_DELETE_SENT_APPLET, APDU_GET_DATA, APDU_CMD_OPEN
+        }
+        
+        private GP_APDU_COMMAND mCmd;
+        private Object mCommandParameter;
+        private byte[] mInstallParams;
+        private byte mPrivileges;
+        private int mSeekReader;
+        private String mSeekReaderName;
+        
+        public GPCommand(MainActivity.APDU_COMMAND cmd, int seekReader, byte[] installParams, byte privileges, Object commandParameter) {
+                switch(cmd) {
+                case APDU_LIST_APPLETS:
+                        mCmd = GP_APDU_COMMAND.APDU_DISPLAYAPPLETS_ONCARD;
+                        break;
+                case APDU_INSTALL_APPLET:
+                        mCmd = GP_APDU_COMMAND.APDU_INSTALL;
+                        break;
+                case APDU_DELETE_SELECTED_APPLET:
+                        mCmd = GP_APDU_COMMAND.APDU_DELETE_SELECTED_APPLET;
+                        break;
+                case APDU_GET_DATA:
+                        mCmd = GP_APDU_COMMAND.APDU_GET_DATA;
+                        break;
+                default:
+                        mCmd = GP_APDU_COMMAND.APDU_CMD_OPEN;
+                }
+                mSeekReader = seekReader;
+                mInstallParams = installParams;
+                mPrivileges = privileges;
+                mCommandParameter = commandParameter;
+                mSeekReaderName = "NFC Reader";
+        }
+        
+        public GP_APDU_COMMAND getCmd() {
+                return mCmd;
+        }
+        
+        public Object getCommandParameter() {
+                return mCommandParameter;
+        }
+        
+        public byte[] getInstallParams() {
+                return mInstallParams;
+        }
+        
+        public byte getPrivileges() {
+                return mPrivileges;
+        }
+        
+        public int getSeekReader() {
+                return mSeekReader;
+        }
+        
+        public String getSeekReaderName() {
+                return mSeekReaderName;
+        }
 }
