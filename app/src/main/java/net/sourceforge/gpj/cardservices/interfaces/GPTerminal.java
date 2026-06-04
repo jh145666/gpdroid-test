@@ -1,18 +1,43 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Michael Hölzl <mihoelzl@gmail.com>.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Public License v3.0
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * Contributors:
+ *     Michael Hölzl <mihoelzl@gmail.com> - initial implementation
+ ******************************************************************************/
 package net.sourceforge.gpj.cardservices.interfaces;
 
+import javax.smartcardio.Card;
+import javax.smartcardio.CardChannel;
+import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
-public abstract class GPTerminal extends CardTerminal {
-	
-	
+/**
+ * Interface for GlobalPlatform terminal implementations.
+ * Extends CardTerminal with GP-specific functionality.
+ */
+public interface GPTerminal {
 
-	abstract public int getReader();
+        /**
+         * Get the underlying CardTerminal.
+         */
+        CardTerminal getCardTerminal();
 
-	abstract public void setReader(int mReader);
+        /**
+         * Transmit an APDU command and get the response.
+         */
+        byte[] transmitApdu(byte[] apdu) throws CardException;
 
-	abstract public void shutdown();
+        /**
+         * Check if a card is currently connected.
+         */
+        boolean isConnected();
 
-	abstract public boolean isConnected();
-
-
+        /**
+         * Disconnect from the current card.
+         */
+        void disconnect();
 }
